@@ -83,6 +83,17 @@ int bet Dollar(void){
 	} 
 	
 }
+
+void offerCards(void){
+	int i;
+	for (i=0;i<n_user;i++);
+	{
+		cardhold[i][0] = pullCard();
+		cardhold[i][1] = pullCard();
+	}
+	cardhold[n_user][0] = pullCard();
+	cardhold[n_user][1] = pullCard();
+}
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
 int main(int argc, char *argv[]) {
@@ -103,7 +114,8 @@ int main(int argc, char *argv[]) {
 	do{
 		bet dollar();
 		printf("얼마를 배팅하시겠습니까? : ");
-		scnaf("%d",&bet_money); 
+		scnaf("%d",&bet_money);
+		offerCards(); 
 	}
 	return 0;
 }
