@@ -69,7 +69,7 @@ int mixCardTray(void){
 	int i;
 	for(i=0;i<N_CARD;i++)
 	{
-		CardTray[i]=1+rand(%(N_CARD));
+		CardTray[i]=1+rand(%(N_MAX_CARDNUM));
 	}
 	return 0;
 }
@@ -93,7 +93,15 @@ void offerCards(void){
 	}
 	cardhold[n_user][0] = pullCard();
 	cardhold[n_user][1] = pullCard();
+	
+	return;
 }
+
+int pullCard(void){
+	int card
+	card = cardTray[rand()%(N_CARD)]
+}
+
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
 int main(int argc, char *argv[]) {
