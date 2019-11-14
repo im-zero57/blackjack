@@ -75,6 +75,11 @@ int main(int argc, char *argv[]) {
 	srand((unsigned)time(NULL));
 	
 	max_user = configUsre();
+	//돈
+	for(i=0;i<max_user;i++){
+		dollar[i] = 1+rand()%(N_DOLLAR);
+		printf("플레이어 i의 배팅 금액은 %d 입니다", i+1, d0llar[i]);
+	} 
 	 
 	return 0;
 }
