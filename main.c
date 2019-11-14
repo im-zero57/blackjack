@@ -65,6 +65,14 @@ int configUser(void){
 	
 } 
 
+int mixCardTray(void){
+	int i;
+	for(i=0;i<N_CARD;i++)
+	{
+		CardTray[i]=1+rand(%(N_CARD));
+	}
+	return 0;
+}
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
 int main(int argc, char *argv[]) {
@@ -80,6 +88,8 @@ int main(int argc, char *argv[]) {
 		dollar[i] = 1+rand()%(N_DOLLAR);
 		printf("플레이어 i의 배팅 금액은 %d 입니다", i+1, d0llar[i]);
 	} 
+	//카드 트레이
+	mixCardTray();
 	 
 	return 0;
 }
