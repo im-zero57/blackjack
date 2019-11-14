@@ -73,23 +73,37 @@ int mixCardTray(void){
 	}
 	return 0;
 }
+
+int bet Dollar(void){
+	
+	int i;
+	for(i=0;i<max_user;i++){
+		dollar[i] = 1+rand()%(now_money);
+		printf("플레이어 i의 배팅 금액은 %d 입니다", i+1, d0llar[i]);
+	} 
+	
+}
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
 int main(int argc, char *argv[]) {
 	int roundIndex = 0;
 	int max_user;
 	int i;
+	int bet_money; 
 	
 	srand((unsigned)time(NULL));
 	
 	max_user = configUsre();
-	//돈
-	for(i=0;i<max_user;i++){
-		dollar[i] = 1+rand()%(N_DOLLAR);
-		printf("플레이어 i의 배팅 금액은 %d 입니다", i+1, d0llar[i]);
-	} 
+	//돈 
+	printf("모든 플레이어의 초기 자본금은 %d 달러 입니다.",N_DOLLAR);
+	
 	//카드 트레이
 	mixCardTray();
-	 
+	
+	do{
+		bet dollar();
+		printf("얼마를 배팅하시겠습니까? : ");
+		scnaf("%d",&bet_money); 
+	}
 	return 0;
 }
