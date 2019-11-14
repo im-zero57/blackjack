@@ -77,9 +77,9 @@ int mixCardTray(void){
 int bet Dollar(void){
 	
 	int i;
-	for(i=0;i<max_user;i++){
+	for(i=1;i<max_user;i++){
 		dollar[i] = 1+rand()%(now_money);
-		printf("플레이어 i의 배팅 금액은 %d 입니다", i+1, d0llar[i]);
+		printf("플레이어 i의 배팅 금액은 %d 입니다", i, dollar[i]);
 	} 
 	
 }
@@ -105,12 +105,12 @@ int pullCard(void){
 
 void printCardInitialStatus(void){
 	int i;
-	for (i=0;i<(n_user-1);i++)
+	printf("본인의 카드 : %d , %d",cardhold[0][0],cardhold[0][1]);
+	for (i=1;i<(n_user-1);i++)
 	{
 		printf("i 플레이어의 카드: %d , %d",i,cardhold[i][0],cardhold[i][0])
 	}
-	printf("본인의 카드 : %d , %d",cardhold[n_user][0],cardhold[n_user][1]);
-	printf("딜러의 카드 : %d ",cardhold[n_user-1][0]);
+	printf("딜러의 카드 : %d ",cardhold[n_user][0]);
 }
 
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
@@ -121,6 +121,8 @@ int main(int argc, char *argv[]) {
 	int max_user;
 	int i;
 	int bet_money;
+	int now_money;
+	int answer;
 	
 	srand((unsigned)time(NULL));
 	
@@ -139,6 +141,23 @@ int main(int argc, char *argv[]) {
 		offerCards(); 
 		
 		printCardInitialStatus();
+		printf("\n----------------------game start--------------------\n");
+		for(i=0;i<n_user;i++)
+		{
+			while((cardhold[i][0]+cardhold[i][1])!=21)
+			
+			if((cardhold[i][0]+cardhold[i][1])=21)
+				printf("축하합니다! 블랙잭입니다! 당신이 얻는 급액은 %d 달러 입니다",dollar[i]+dollar[i]);
+				now_money = 2*dollar[i];
+			if else(cardhold[i][0]+cardhold[i][1]<21)
+				printf("go or stop? : ");
+				scanf("%a",answer);
+				{
+					if(answer=='go')
+						
+				}
+				 
+		}
 	}
 	return 0;
 }
