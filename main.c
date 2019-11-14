@@ -99,20 +99,33 @@ void offerCards(void){
 
 int pullCard(void){
 	int card
-	card = cardTray[rand()%(N_CARD)]
+	card = cardTray[rand()%(N_CARD)];
+	return card;
+}
+
+void printCardInitialStatus(void){
+	int i;
+	for (i=0;i<(n_user-1);i++)
+	{
+		printf("i 플레이어의 카드: %d , %d",i,cardhold[i][0],cardhold[i][0])
+	}
+	printf("본인의 카드 : %d , %d",cardhold[n_user][0],cardhold[n_user][1]);
+	printf("딜러의 카드 : %d ",cardhold[n_user-1][0]);
 }
 
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
+
 
 int main(int argc, char *argv[]) {
 	int roundIndex = 0;
 	int max_user;
 	int i;
-	int bet_money; 
+	int bet_money;
 	
 	srand((unsigned)time(NULL));
 	
-	max_user = configUsre();
+	max_user = configUser();
+	n_user = configUser()+2;
 	//돈 
 	printf("모든 플레이어의 초기 자본금은 %d 달러 입니다.",N_DOLLAR);
 	
@@ -124,6 +137,8 @@ int main(int argc, char *argv[]) {
 		printf("얼마를 배팅하시겠습니까? : ");
 		scnaf("%d",&bet_money);
 		offerCards(); 
+		
+		printCardInitialStatus();
 	}
 	return 0;
 }
