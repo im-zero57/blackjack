@@ -124,6 +124,23 @@ void printUserCardStatus(int user, int cardcnt){
 	printf("\t:::");
 }
 
+int calStepResult(int user,int turn){
+	
+	int step_result;
+	int i;
+	for(i=0;i<2*turn;i++)
+		step_result += cardhold[user][i];
+	return step_result;
+}
+
+int getAction(void){
+	
+	char a;
+	printf("go하시겠습니까? stop 하시겠습니까? (Y/N) :  ");
+	scnaf("%a",&a);
+	return a;
+}
+
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
 
@@ -153,12 +170,63 @@ int main(int argc, char *argv[]) {
 		
 		printCardInitialStatus();
 		printf("\n----------------------game start--------------------\n");
-		for(i=0;i<n_user;i++)
+		roundIndex++;
+		
+		printUserCardStatus(i,2*roundIndex);
+		calStepResult(i,roundIndex);
+		cardSum[0]=cardhold[0]+cardhold[0][1]
+		if(cardSum[0]==21)
 		{
-			while((cardhold[i][0]+cardhold[i][1])<21||answer = 'Y'){
+			dollar[0]+=bet_money;
+		} 
+		if else(cardSum[0]>21)
+			dollar[0]-=bet_money;
+		else	
+			answer=getAction();
+			if(answer=='Y')
+				cardSum[0]+=pullCard()
+				if(cardSum[0]==21)
+				{
+					dollar[0]+=bet_money;
+				}
+				if else(cardSum[0]>21)
+				{
+					dollar[0]-=bet_money;
+				}
+				else
+					dollar[0]=dollar[0];
+					
+			if else(answer!='Y')				
+				for(i=1;i<n_user;i++)
+				{
+					while((cardhold[i][0]+cardhold[i][1])<21||answer = 'Y'){
+						printUserCardStatus(i,2*roundIndex)
+						calStepResult(i,roundIndex)
+						cardSum[i]=cardhold[i][0]+cardhold[i][1]
+						if (cardSum[i]==21)
+						{
+							dollar[i]+=bet_money;
+							break;
+						}
+						if else(cardSum[i]>21)
+							dollar[i]-=bet_money;
+							break;
+						if else(cardSum[i]<17)
+							printf("i번째 플레이어가 go를 하셨습니다.",i );
+							cardSum[i]+=pullcard()
+							if(cardSum[i]==21)
+								dollar[i]+=bet_money;
+								break;
+							if else(cardSum[i]>21)
+								dollar[i]-=bet_money;
+								break;
+							else
+								break;
+						if else(cardSum[i]>=17)
+							cardSum[i]=cardSum[i];
+											
+					}
 				
-			}
-			
 			
 			printUserCardStatus
 			
