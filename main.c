@@ -37,19 +37,19 @@ int gameend = 0; 									//게임이 끝나는 것을 의미
 int cardNumber[N_MAX_USER+1];
 
 //카드 함수 정의----------
-int getCardNum(int cardnum) {
+int getCardNum(int card) {
 	
 	int real_number;
-	if(cardnum = 'K'){
-		real_number = 10;
+	if(card>0&&card<14){
+		card="
 	}
-	if else(cardnum = 'Q'){
+	if else(cardnum = 'QUEEN'){
 		real_number = 10;
 	} 
-	if else(cardnum = 'J'){
+	if else(cardnum = 'JACK'){
 		real_number = 10; 
 	}
-	if else(cardnum = 'A'){
+	if else(cardnum = 'ACE'){
 		if (cardnum)
 	}
 	else
@@ -59,9 +59,64 @@ int getCardNum(int cardnum) {
 } 
 
 //할당된 카드를 보여줌
-void printCard(int cardnum) {
+void printCard(int card) {
 	
-} 
+	int ch_card;
+	if(card==1)
+	{
+		printf("♠ACE"); 
+	}
+	else if(card>1&&card<11)
+	{
+		printf("♠%d",card-1);
+	}
+	else if(card==11)
+	{
+		pritnf("♠king");	
+	}
+	else if(card==12)
+	{
+		printf("♠Queen");
+	} 
+	else if(card==13)
+	{
+		printf("♠Jack");
+	}
+	else if(card==14)
+	{
+		printf("◇ACE");
+	}
+	else if(card>14&&card<24)
+	{
+		printf("◇%d",card-13);
+	}
+	else if(card==24)
+		printf("◇King");
+	else if(card==25)
+		printf("◇Queen");
+	else if(card==26)
+		printf("◇Jack");
+	else if(card==27)
+		printf("♡ACE");
+	else if(card>27&&card<37)
+		printf("♡%d",card-28);
+	else if(card==37)
+		printf("♡King");
+	else if(card==38)
+		printf("♡Queen");
+	else if(card==39)
+		printf("♡Jack");
+	else if(card==40)
+		printf("♣ACE");
+	else if(card>40&&card<50)
+		printf("♣%d",card-39);
+	else if(card==50)
+		printf("♣King");
+	else if(card==51)
+		printf("♣Queen");
+	else if(card==52)
+		Printf("♣Jack");												 
+} 	
 //플레이어의 구성
 int configUser(void){
 	
@@ -76,12 +131,12 @@ int mixCardTray(void){
 	int i;
 	for(i=0;i<N_CARD;i++)
 	{
-		CardTray[i]=1+rand(%(N_MAX_CARDNUM));
+		CardTray[i]=1+rand(%(N_CARD));
 	}
 	return 0;
 }
 
-void bet Dollar(void){
+void betDollar(void){
 	
 	int bet_money
 	printf("얼마를 배팅하시겠습니까? : ");
@@ -224,15 +279,11 @@ int main(int argc, char *argv[]) {
 	int roundIndex = 0;
 	int n_user;
 	int i;
-	
-	int now_money;
+
 	int answer;
-	int now_cardsum = 0;
-	int round_try_for_me = 0;
-	int round_try_for_player = 0;
-	int round_try_for_dealer = 0;
+	
 	int input=0;
-	int until_cardnum;
+	int until_cardnum=0;
 	
 	srand((unsigned)time(NULL));
 
@@ -244,7 +295,7 @@ int main(int argc, char *argv[]) {
 	mixCardTray();
 	
 	do{
-		bet dollar();
+		betDollar();
 		printf("얼마를 배팅하시겠습니까? : ");
 		scnaf("%d",&bet_money);
 		offerCards(); 
@@ -253,7 +304,17 @@ int main(int argc, char *argv[]) {
 		printf("\n------------------------게임을 시작하겠습니다-------------------------\n");
 		roundIndex++;
 		
-		printf(">>>나의 순서입니다---------------------------------------------------\n")		
+		printf("현재는 %d라운드 입니다.",roundIndex);
+		
+		printf("현재 자산 결과는 다음과 같습니다.");
+		for(i=0;i<n_user;i++)
+		{
+			printf("플레이어i의 현재 자산은 %d 입니다",i,now_money[i]);
+		}
+		
+		printf("\n---------------------------------------------------------\n");
+		 
+		printf(">>>나의 순서입니다---------------------------------------------------\n");		
 		while(cardSum[0]<21&&input==0)
 			int round_try_for_me = 0;
 			round_try_for_me++
@@ -263,7 +324,7 @@ int main(int argc, char *argv[]) {
 				printf("축하합니다! 블랙잭이네요:P 당신이 얻는 급액은 %d원 입니다",2*dollar[0]);
 				now_money[0]+=2*dollar[0];
 			else if(cardSum[0]>21)
-				printf("사망하셨습니다:( 당신의 카드의 합은 %d 입니다. 당신이 잃은 금액은 %d 원입니다",cardSum[0],dollar[0]);
+				printf("지셨습니다:( 당신의 카드의 합은 %d 입니다. 당신이 잃은 금액은 %d 원입니다",cardSum[0],dollar[0]);
 				now_money-=dollar[0];	
 			else
 				input = getAction();
@@ -287,7 +348,7 @@ int main(int argc, char *argv[]) {
 				}
 				else if(cardSum[i]>21)
 				{
-					printf("사망하셨습니다:( 플레이어 i의 카드의  합은 %d 입니다. 플레이어 i가 잃은 금액은 %d 원입니다",i,i,cardSum[0],);
+					printf("지셨습니다:( 플레이어 i의 카드의  합은 %d 입니다. 플레이어 i가 잃은 금액은 %d 원입니다",i,i,cardSum[0],);
 					now_money[i]-=dollar[i];
 				}
 				else if(cardSum[i]<17)
