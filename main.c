@@ -200,12 +200,15 @@ int main(int argc, char *argv[]) {
 				printf("축하합니다! 블랙잭이네요:P 당신이 얻는 급액은 %d원 입니다",2*bet_money);
 				dollar[0]+=2*bet_money;
 				break;
-			if else(cardSum[0]>)	
-			input = getAction();
-			if(input==0)
-			{
-				offerCardsplus(0,round_try)
-			}
+			if else(cardSum[0]>21)
+				printf("사망하셨습니다:( 당신의 카드의 합은 %d 입니다. 당신이 잃은 금액은 %d 원입니다",cardSum[0],bet_money);
+				dollar[0]-=bet_money;	
+			else
+				input = getAction();
+				if(input==0)
+				{
+					offerCardsplus(0,round_try)
+				}
 				
 		if(cardSum[0]==21)
 		{
