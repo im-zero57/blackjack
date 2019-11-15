@@ -350,7 +350,17 @@ int main(int argc, char *argv[]) {
 			gameend = 1;
 		}
 	}while(gameend == 0);
-	checkWinner()	
+	
+	int winner_money;
+	winner_money = checkWinner(n_user)
+	for(i=0;i<n_user;i++)
+	{
+		if(winner_money==now_money[i])
+		{
+			printf("승자는 플레이어i입니다.",i);
+			break;
+		}
+	}	
 		
 	}
 	return 0;
