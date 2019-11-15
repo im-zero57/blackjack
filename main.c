@@ -97,6 +97,12 @@ void offerCards(void){
 	return;
 }
 
+void offerCardsplus(int player,int turn){
+	int i;
+	for (i=3;i<turn+2;i++)
+		cardhold[player][i] = pullCard();
+}
+
 int pullCard(void){
 	int card
 	card = cardTray[rand()%(N_CARD)];
@@ -124,22 +130,32 @@ void printUserCardStatus(int user, int cardcnt){
 	printf("\t:::");
 }
 
-int calStepResult(int user,int turn){
+int calcStepResult(int user,int turn){
 	
 	int step_result;
 	int i;
-	for(i=0;i<2*turn;i++)
+	for(i=0;i<turn;i++)
 		step_result += cardhold[user][i];
 	return step_result;
 }
 
 int getAction(void){
 	
-	char a;
-	printf("go하시겠습니까? stop 하시겠습니까? (Y/N) :  ");
-	scnaf("%a",&a);
-	return a;
+	int input;
+	printf("go하시겠습니까? stop 하시겠습니까? (Y-0 / N-others) :  ");
+	input=getIntegerInput();
+	return input;
 }
+
+int getIntegerInput(void) {
+    int input, num;
+    
+    num = scanf("%d", &input);
+    fflush(stdin);
+    if (num != 1) //if it fails to get integer
+        input = -1;
+    
+    return input;
 
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
@@ -151,6 +167,9 @@ int main(int argc, char *argv[]) {
 	int bet_money;
 	int now_money;
 	int answer;
+	int now_cardsum = 0;
+	int round_try = 0;
+	int input=0;
 	
 	srand((unsigned)time(NULL));
 	
@@ -169,12 +188,25 @@ int main(int argc, char *argv[]) {
 		offerCards(); 
 		
 		printCardInitialStatus();
-		printf("\n----------------------game start--------------------\n");
+		printf("\n------------------------게임을 시작하겠습니다-------------------------\n");
 		roundIndex++;
 		
-		printUserCardStatus(i,2*roundIndex);
-		calStepResult(i,roundIndex);
-		cardSum[0]=cardhold[0]+cardhold[0][1]
+		printf(">>>나의 순서입니다---------------------------------------------------\n")		
+		while(cardSum[0]<21&&input==0)
+			round_try++
+			printUserCardStatus(0,round_try);
+			cardSum[0]=calcStepResult(0,round_try);
+			if(cardSum[0]==21)
+				printf("축하합니다! 블랙잭이네요:P 당신이 얻는 급액은 %d원 입니다",2*bet_money);
+				dollar[0]+=2*bet_money;
+				break;
+			if else(cardSum[0]>)	
+			input = getAction();
+			if(input==0)
+			{
+				offerCardsplus(0,round_try)
+			}
+				
 		if(cardSum[0]==21)
 		{
 			dollar[0]+=bet_money;
@@ -197,35 +229,41 @@ int main(int argc, char *argv[]) {
 					dollar[0]=dollar[0];
 					
 			if else(answer!='Y')				
-				for(i=1;i<n_user;i++)
+				for(i=0;i<n_user;i++)
 				{
-					while((cardhold[i][0]+cardhold[i][1])<21||answer = 'Y'){
-						printUserCardStatus(i,2*roundIndex)
+					while((cardSum[i]<21&&cardSum[i]<17){
+						printf("i번째 player 순서 입니다")
+						printUserCardStatus(i,roundIndex)
 						calStepResult(i,roundIndex)
-						cardSum[i]=cardhold[i][0]+cardhold[i][1]
-						if (cardSum[i]==21)
+						
+						cardSum[i]=cardhold[i][0]+cardhold[i][1];
+						
+						
+					if (cardSum[i]==21)
 						{
-							dollar[i]+=bet_money;
-							break;
+						dollar[i]+=bet_money;
+						break;
 						}
-						if else(cardSum[i]>21)
-							dollar[i]-=bet_money;
-							break;
-						if else(cardSum[i]<17)
-							printf("i번째 플레이어가 go를 하셨습니다.",i );
-							cardSum[i]+=pullcard()
-							if(cardSum[i]==21)
+					if else(cardSum[i]>21)
+						dollar[i]-=bet_money;
+						break;
+						
+					if else(cardSum[i]<17)
+						printf("i번째 플레이어가 go를 하셨습니다.",i );
+						cardSum[i]+=pullcard()
+						if(cardSum[i]==21)
 								dollar[i]+=bet_money;
 								break;
-							if else(cardSum[i]>21)
+						if else(cardSum[i]>21)
 								dollar[i]-=bet_money;
 								break;
-							else
+						else
 								break;
-						if else(cardSum[i]>=17)
-							cardSum[i]=cardSum[i];
+					if else(cardSum[i]>=17)
+						cardSum[i]=cardSum[i];
 											
 					}
+				
 				
 			
 			printUserCardStatus
