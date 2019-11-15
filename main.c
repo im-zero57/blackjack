@@ -20,7 +20,15 @@ int cardIndex = 0;
 
 //플레이어와 관련된 사항의 정의 
 int dollar[N_MAX_USER];		//각각의 플레이어가 가질 수 있는 돈을 배열을 이용하여 정의 
+int bet_dollar[N_MAX_USER];
 int n_user; 
+int now_money[N_MAX_USER];
+	
+now_money[0]=50;
+now_money[1]=50;
+now_moeny[2]=50;
+now_money[3]=50;
+now_money[4]=50;
 
 //플레이 판 정의
 int cardhold[N_MAX_USER+1][N_MAX_CARDHOLD];			//플레이 판 위에 있는 플레이어가 가지는 카드의 수를 배열을 이용하여 정의 
@@ -74,11 +82,16 @@ int mixCardTray(void){
 	return 0;
 }
 
-int bet Dollar(void){
+void bet Dollar(void){
 	
+	int bet_money
+	printf("얼마를 배팅하시겠습니까? : ");
+	scnaf("%d",bet_money);
+	dollar[0]=bet_money;
+	 
 	int i;
 	for(i=1;i<max_user;i++){
-		dollar[i] = 1+rand()%(now_money);
+		dollar[i] = 1+rand()%(N_DOLLAR);
 		printf("플레이어 i의 배팅 금액은 %d 입니다", i, dollar[i]);
 	} 
 	
@@ -116,7 +129,7 @@ void printCardInitialStatus(void){
 	{
 		printf("i 플레이어의 카드: %d , %d",i,cardhold[i][0],cardhold[i][0])
 	}
-	printf("딜러의 카드 : %d ",cardhold[n_user][0]);
+	printf("딜러의 카드 : <비밀> , %d ",cardhold[n_user][0]);
 }
 
 void printUserCardStatus(int user, int cardcnt){
@@ -156,6 +169,7 @@ int getIntegerInput(void) {
         input = -1;
     
     return input;
+        
 
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
@@ -164,12 +178,15 @@ int main(int argc, char *argv[]) {
 	int roundIndex = 0;
 	int max_user;
 	int i;
-	int bet_money;
+	
 	int now_money;
 	int answer;
 	int now_cardsum = 0;
-	int round_try = 0;
+	int round_try_for_me = 0;
+	int round_try_for_player = 0;
+	int round_try_for_dealer = 0;
 	int input=0;
+	int bet
 	
 	srand((unsigned)time(NULL));
 	
@@ -193,96 +210,110 @@ int main(int argc, char *argv[]) {
 		
 		printf(">>>나의 순서입니다---------------------------------------------------\n")		
 		while(cardSum[0]<21&&input==0)
-			round_try++
-			printUserCardStatus(0,round_try);
-			cardSum[0]=calcStepResult(0,round_try);
+			round_try_for_me++
+			printUserCardStatus(0,round_try_for_me);
+			cardSum[0]=calcStepResult(0,round_try_for_me);
 			if(cardSum[0]==21)
-				printf("축하합니다! 블랙잭이네요:P 당신이 얻는 급액은 %d원 입니다",2*bet_money);
-				dollar[0]+=2*bet_money;
-				break;
-			if else(cardSum[0]>21)
-				printf("사망하셨습니다:( 당신의 카드의 합은 %d 입니다. 당신이 잃은 금액은 %d 원입니다",cardSum[0],bet_money);
-				dollar[0]-=bet_money;	
+				printf("축하합니다! 블랙잭이네요:P 당신이 얻는 급액은 %d원 입니다",2*dollar[0]);
+				now_money[0]+=2*dollar[0];
+			else if(cardSum[0]>21)
+				printf("사망하셨습니다:( 당신의 카드의 합은 %d 입니다. 당신이 잃은 금액은 %d 원입니다",cardSum[0],dollar[0]);
+				now_money-=dollar[0];	
 			else
 				input = getAction();
 				if(input==0)
 				{
-					offerCardsplus(0,round_try)
+					offerCardsplus(0,round_try_for_me)
 				}
 				
-		if(cardSum[0]==21)
-		{
-			dollar[0]+=bet_money;
-		} 
-		if else(cardSum[0]>21)
-			dollar[0]-=bet_money;
-		else	
-			answer=getAction();
-			if(answer=='Y')
-				cardSum[0]+=pullCard()
-				if(cardSum[0]==21)
+	
+		for(i=1;i<n_user;i++)
+		{	printf(">>>플레이어i의 순서입니다---------------------------------------\n",i);
+			while((cardSum[i]<21&&cardSum[i]<17){
+				round_try_for_player++
+				printUserCardStatus(i,round_try_for_player);
+				cardSum[i]=calcStepResult(i,round_try_for_player);
+				if(cardSum[i]==21)
 				{
-					dollar[0]+=bet_money;
+					printf("축하합니다! 블랙잭이네요:P 플레이어 i가 얻는 급액은 %d원 입니다",i,2*dollar[i]);
+					now_money[i]+=2*dollar[i];
 				}
-				if else(cardSum[0]>21)
+				else if(cardSum[i]>21)
 				{
-					dollar[0]-=bet_money;
+					printf("사망하셨습니다:( 플레이어 i의 카드의  합은 %d 입니다. 플레이어 i가 잃은 금액은 %d 원입니다",i,i,cardSum[0],);
+					now_money[i]-=dollar[i];
 				}
-				else
-					dollar[0]=dollar[0];
-					
-			if else(answer!='Y')				
-				for(i=0;i<n_user;i++)
+				else if(cardSum[i]<17)
 				{
-					while((cardSum[i]<21&&cardSum[i]<17){
-						printf("i번째 player 순서 입니다")
-						printUserCardStatus(i,roundIndex)
-						calStepResult(i,roundIndex)
-						
-						cardSum[i]=cardhold[i][0]+cardhold[i][1];
-						
-						
-					if (cardSum[i]==21)
-						{
-						dollar[i]+=bet_money;
-						break;
-						}
-					if else(cardSum[i]>21)
-						dollar[i]-=bet_money;
-						break;
-						
-					if else(cardSum[i]<17)
-						printf("i번째 플레이어가 go를 하셨습니다.",i );
-						cardSum[i]+=pullcard()
-						if(cardSum[i]==21)
-								dollar[i]+=bet_money;
-								break;
-						if else(cardSum[i]>21)
-								dollar[i]-=bet_money;
-								break;
-						else
-								break;
-					if else(cardSum[i]>=17)
-						cardSum[i]=cardSum[i];
-											
-					}
+					printf("플레이어i가 go를 선택했습니다.");
+					offerCardsplus(i,round_try_for_player);
+				}
+				else if(cardSum[i]>=17)
+				{
+					printf("플레이어i가 stop을 선택했습니다.");
+				}
 				
-				
-			
-			printUserCardStatus
-			
-			if((cardhold[i][0]+cardhold[i][1])=21)
-				printf("축하합니다! 블랙잭입니다! 당신이 얻는 급액은 %d 달러 입니다",dollar[i]+dollar[i]);
-				now_money = 2*dollar[i];
-			if else(cardhold[i][0]+cardhold[i][1]<21)
-				printf("go or stop? : ");
-				scanf("%a",answer);
-				{
-					if(answer=='go')
-						
-				}
-				 
+			}
 		}
+		printf("딜러의 순서 입니다!") 
+		while(cardSum[n_user]<17)
+		{
+			round_try_for_dealer++
+			printUserCardStatus(n_user,round_try_for_dealer);
+			cardSum[n_user]=calcStepResult(n_user,round_try_for_dealer);
+			if(cardSum[n_user]==21)
+				break;
+			else if(cardSum[n_user]>21)
+				break;	
+			else if(cardSum[n_user]<17)
+			{
+				printf("딜러가 go를  선택했습니다.");
+				offerCardsplus(n_user,round_try_for_dealer);
+			}
+			else if(cardSum[n_user]>17&&cardSum[n_user]<21)
+			{
+				printf("딜러가 stop을 선택했습니다.")
+			}
+		}
+		printf("딜러의 값은 %d 입니다",cardSum[n_user]);
+		if(cardSum[n_user]>21)
+		{
+			printf("딜러의 카드 합이 21을 초과하므로 모든 플레이어들에게 배팅금액이 다시 돌아갑니다(본인 카드의 합이 21을 넘는 플레이어는 배팅금액을 다시 얻을 수 없습니다.)");
+			for(i=0;i<n_user;i++)
+			{
+				if(cardSum[i]<21)
+				{
+					now_money[i]+=dollar[i];
+				}
+			 } 
+		}
+		else if(cardSum[n_user]==21)
+		{
+			printf("딜러의 카드 합이 21이므로 모든 플레이어들이 배팅금액을 잃습니다.(블랙잭이 된 플레이어는 배팅금액을 잃지 않습니다.)");
+			for(i=0;i<n_user;i++)
+			{
+				if(cardSum[i]<21)
+				{
+				now_money[i]-=dollar[i];
+				}
+			}
+		}
+		else if(cardSum[n_user]<21)
+		{
+			for(i=0;i<n_user;i++)
+			{
+				if(cardSum[i]<cardSum[n_user])
+				{
+					now_money[i]+=dollar[i];
+				}
+				else if(cardSum[i]>cardSum[n_user]&&cardSum[i<21])
+				{
+					now_money[i]-=dollar[i];
+				}
+			}
+		}
+		printf("결과는 다음과 같습니다.");
+		
 	}
 	return 0;
 }
