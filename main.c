@@ -113,6 +113,17 @@ void printCardInitialStatus(void){
 	printf("딜러의 카드 : %d ",cardhold[n_user][0]);
 }
 
+void printUserCardStatus(int user, int cardcnt){
+	int i;
+	
+	printf("   -> card : ");
+	for (i=0;i<cardcnt;i++)
+	{
+		printCard(cardhold[user][i]);
+	}
+	printf("\t:::");
+}
+
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
 
@@ -144,7 +155,12 @@ int main(int argc, char *argv[]) {
 		printf("\n----------------------game start--------------------\n");
 		for(i=0;i<n_user;i++)
 		{
-			while((cardhold[i][0]+cardhold[i][1])!=21)
+			while((cardhold[i][0]+cardhold[i][1])<21||answer = 'Y'){
+				
+			}
+			
+			
+			printUserCardStatus
 			
 			if((cardhold[i][0]+cardhold[i][1])=21)
 				printf("축하합니다! 블랙잭입니다! 당신이 얻는 급액은 %d 달러 입니다",dollar[i]+dollar[i]);
