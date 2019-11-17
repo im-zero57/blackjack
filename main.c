@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define N_CARDSET		1
 #define N_CARD			52
@@ -19,20 +20,18 @@ int CARDTRAY[N_CARDSET*N_CARD];
 int cardIndex = 0;
 
 //플레이어와 관련된 사항의 정의 
-int dollar[N_MAX_USER];		//각각의 플레이어가 가질 수 있는 돈을 배열을 이용하여 정의 
-int bet_dollar[N_MAX_USER];
-int now_money[N_MAX_USER];
-int bet_money;
+int dollar[N_MAX_USER];		//각각의 플레이어가 배팅할 돈을 입력받을 배열 
+int now_money[N_MAX_USER];	//당시의 금액을 알려줌 
+int bet_money;				//배팅받을 금액을 말함 
 
-//플레이 판 정의
-int cardplayer[N_MAX_USER][N_MAX_CARDHOLD];
-int cardhold[N_MAX_USER+1][N_MAX_CARDHOLD];			//플레이 판 위에 있는 플레이어가 가지는 카드의 수를 배열을 이용하여 정의 
-int cardSum[N_MAX_USER+1];							//플레이 판 위에 있는 카드의 총 합  
+//플레이 판 정의 
+int cardhold[N_MAX_USER+1][N_MAX_CARDHOLD];			//플레이 판 위에 있는 플레이어가 가지는 카드를 배열을 이용하여 정의 
+int cardSum[N_MAX_USER+1];							//각 플레이어가 가지는 카드의 합 
 int gameend = 0; 									//게임이 끝나는 것을 의미
-int cardNumber[N_MAX_USER+1];
+int cardNumber[N_MAX_USER+1];						//각 플레이어와 딜러가 가지는 카드의 개수 
+int Number[52];
 
-
-//카드 함수 정의---------
+//받은 숫자가 의미하는 카드의 진짜 숫자를 정의---------
 int getCardNum(int card) {
 	
 	int real_number;
@@ -59,7 +58,7 @@ int getCardNum(int card) {
 	return real_number;
 } 
 
-//할당된 카드를 보여줌
+//할당된 숫자가 의미하는 카드의 모양과 숫자를 알려줌 
 
 void printCard(int card) {
 	
@@ -146,7 +145,7 @@ void printCard(int card) {
 	} 	
 }
 
-//플레이어의 구성
+//함께 할 플레이어의 수를 입력받는 프로그램 
 int configUser(void){
 	
 	int with_player;
@@ -156,15 +155,28 @@ int configUser(void){
 	
 } 
 
+//카드를 중복 없이 섞는 함수 
 int mixCardTray(void){
 	int i;
-	for(i=0;i<N_CARD;i++)
-	{
+	int player_i
+	
+	
+	for(i=0;i<=N_CARD;i++)
+	{	
 		CARDTRAY[i]=1+rand()%(N_CARD);
+		for(player_i=0,player_i<i;player_i++)
+		{
+			if(CARDTRAY[i]==CARDTRAY[player_i])
+			{	
+				i--;
+				break;
+			}	
+		}
 	}
 	return 0;
 }
 
+//배팅할 금액을 입력받음 
 void betDollar(void){
 	
 	int bet_money;
@@ -181,12 +193,47 @@ void betDollar(void){
 	
 }
 
+//카드를 제공함 
 void offerCards(void){
 	int i;
+	int player_i;
+	int result;
+	
 	for (i=0;i<N_MAX_USER;i++);
 	{
 		cardhold[i][0] = pullCard();
+		for(player_i=0;player_i<i;player_i++)
+		{
+			result=CheckSame(cardhold[player_i][0],cardhold[i][0]);
+			
+			if(result==1)
+			{
+				i--;
+				break;
+			}
+		}
 		cardhold[i][1] = pullCard();
+		for(player_i=0;player_i<i;player_i++)
+		{
+			result=CheckSame(cardhold[player_i][1],cardhold[i][1]);
+			
+			if(result==1)
+			{
+				i--;
+				break;
+			}
+		}
+		for(palyer_i=0;player_i<i;player_i++)
+		{
+			result = ChekSame(cardhold[i][0],cardhold[i][1]);
+			if(result==1)
+			{
+				i--;
+				break;
+			}
+			
+		}
+		
 	}
 	cardhold[N_MAX_USER][0] = pullCard();
 	cardhold[N_MAX_USER][1] = pullCard();
@@ -194,15 +241,26 @@ void offerCards(void){
 	return;
 }
 
+//추가로 나눠줄 카드를 알려줌 
 void offerCardsplus(int player,int turn){
 	int i;
 	for (i=3;i<turn+2;i++)
 		cardhold[player][i] = pullCard();
 }
 
-int pullCard(void){
+int CheckSame(int number_1,int number_2)
+{
+	int result;
+	if(number_1==number_2)
+		result = 1;
+	else if(number_1!=number_2)
+		result = 0;
 	
-	int card;
+	return result;			
+}
+
+int pullCard(void){
+	int card; 
 	card = CARDTRAY[rand()%(N_CARD)];
 	return card;
 }
