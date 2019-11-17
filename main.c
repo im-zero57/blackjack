@@ -29,7 +29,7 @@ int cardhold[N_MAX_USER+1][N_MAX_CARDHOLD];			//플레이 판 위에 있는 플레이어가 �
 int cardSum[N_MAX_USER+1];							//각 플레이어가 가지는 카드의 합 
 int gameend = 0; 									//게임이 끝나는 것을 의미
 int cardNumber[N_MAX_USER+1];						//각 플레이어와 딜러가 가지는 카드의 개수 
-int Number[52];
+
 
 //받은 숫자가 의미하는 카드의 진짜 숫자를 정의---------
 int getCardNum(int card) {
@@ -157,14 +157,15 @@ int configUser(void){
 
 //카드를 중복 없이 섞는 함수 
 int mixCardTray(void){
+	
 	int i;
-	int player_i
+	int player_i;
 	
 	
-	for(i=0;i<=N_CARD;i++)
+	for(i=0;i<N_CARD;i++)
 	{	
 		CARDTRAY[i]=1+rand()%(N_CARD);
-		for(player_i=0,player_i<i;player_i++)
+		for(player_i=0;player_i<i;player_i++)
 		{
 			if(CARDTRAY[i]==CARDTRAY[player_i])
 			{	
@@ -196,43 +197,11 @@ void betDollar(void){
 //카드를 제공함 
 void offerCards(void){
 	int i;
-	int player_i;
-	int result;
 	
 	for (i=0;i<N_MAX_USER;i++);
 	{
 		cardhold[i][0] = pullCard();
-		for(player_i=0;player_i<i;player_i++)
-		{
-			result=CheckSame(cardhold[player_i][0],cardhold[i][0]);
-			
-			if(result==1)
-			{
-				i--;
-				break;
-			}
-		}
 		cardhold[i][1] = pullCard();
-		for(player_i=0;player_i<i;player_i++)
-		{
-			result=CheckSame(cardhold[player_i][1],cardhold[i][1]);
-			
-			if(result==1)
-			{
-				i--;
-				break;
-			}
-		}
-		for(palyer_i=0;player_i<i;player_i++)
-		{
-			result = ChekSame(cardhold[i][0],cardhold[i][1]);
-			if(result==1)
-			{
-				i--;
-				break;
-			}
-			
-		}
 		
 	}
 	cardhold[N_MAX_USER][0] = pullCard();
@@ -248,20 +217,9 @@ void offerCardsplus(int player,int turn){
 		cardhold[player][i] = pullCard();
 }
 
-int CheckSame(int number_1,int number_2)
-{
-	int result;
-	if(number_1==number_2)
-		result = 1;
-	else if(number_1!=number_2)
-		result = 0;
-	
-	return result;			
-}
-
 int pullCard(void){
-	int card; 
-	card = CARDTRAY[rand()%(N_CARD)];
+	int card;
+	card = CARDTRAY[rand()%N_CARD];
 	return card;
 }
 
@@ -406,9 +364,6 @@ int main(int argc, char *argv[]) {
 	
 	do{
 		betDollar();
-		printf("얼마를 배팅하시겠습니까? : ");
-		scanf("%d",&bet_money);
-		bet_money=dollar[0];
 		
 		offerCards(); 
 		
