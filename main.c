@@ -11,8 +11,7 @@
 #define N_MAX_USER		6
 #define N_MAX_CARDHOLD	10
 #define N_MAX_GO		17
-#define N_MAX_BET		6
-
+#define N_MAX_BET		5
 #define N_MIN_ENDCARD	3O
 
 //카드 트레이를 배영을 이용해서  정의
@@ -165,7 +164,7 @@ int mixCardTray(void){
 	
 	for(i=0;i<N_CARD;i++)
 	{	
-		CARDTRAY[i]=1+rand()%(N_CARD);
+		CARDTRAY[i]=1+rand()%N_CARD;
 		
 		for(player_i=0;player_i<i;player_i++)
 		{
@@ -182,18 +181,24 @@ int mixCardTray(void){
 //배팅할 금액을 입력받음 
 void betDollar(void){
 	
+	int i;
+	
+	for(i=0;i<=with_player;i++)
+	{
+		now_money[i]=50;
+	}
+	
 	int bet_money;									//배팅값을 입력 받을 변수 
 	
 	printf("얼마를 배팅하시겠습니까? : ");			//'나'에게 배팅할 값을 물어봄 
-	scanf("%d",bet_money);							//물어본 배팅값을 저장할 변수 
+	scanf("%d",&bet_money);							//물어본 배팅값을 저장할 변수 
 	dollar[0]=bet_money;							//'나'의 배팅값을 저장한 배열값 
 	
 	srand((unsigned)time(NULL));
 	 
-	int i;
 	for(i=1;i<=with_player;i++){					//나와 딜러를 제외한 플레이어 모두의 값을 임의로 입력받음, rand함수로 진행하며	
-		dollar[i] = 1+rand()%now_money[i];		//이 받은 값을 각각의 플레이어의 배팅값을 저장할 배열에 저장함. 
-		printf("플레이어 %d의 배팅 금액은 %d 입니다", i, dollar[i]);
+		dollar[i] = 1+rand()%N_MAX_BET;		//이 받은 값을 각각의 플레이어의 배팅값을 저장할 배열에 저장함. 
+		printf("플레이어 %d의 배팅 금액은 %d 입니다\n", i, dollar[i]);
 	} 
 	
 }
@@ -208,8 +213,8 @@ void offerCards(void){
 		cardhold[i][0] = pullCard(i);				//플레이어 모두에게 제공되는 두가지 카드 중 첫번째 카드. 
 		cardhold[i][1] = pullCard(i+5);				//플레이어 모두에게 제공되는 두가지 카드 중 두번째 카드. 
 	}
-	cardhold[N_MAX_USER][0] = pullCard(N_MAX_USER-1);	//딜러에게 제공하는 두가지 카드 중 첫번째 카드. 
-	cardhold[N_MAX_USER][1] = pullCard(N_MAX_USER);		//딜러에게 제공하는 두가지 카드 중 두번째 카드. 
+	cardhold[N_MAX_USER+1][0] = pullCard(N_MAX_USER-1);	//딜러에게 제공하는 두가지 카드 중 첫번째 카드. 
+	cardhold[N_MAX_USER+1][1] = pullCard(N_MAX_USER);		//딜러에게 제공하는 두가지 카드 중 두번째 카드. 
 	
 	return;
 }
@@ -218,48 +223,54 @@ void offerCards(void){
 void offerCardsplus(int player,int turn){
 	int i;
 	for (i=3;i<turn+2;i++)							 
-		cardhold[player][i] = pullCard(i+10);		//플레이어에게 제공되는 셋,넷,,, 그 이상의 카드. 이 모든 카드는 pullCard 함수로 받는다. 
+		cardhold[player][i] = pullCard(i+7);		//플레이어에게 제공되는 셋,넷,,, 그 이상의 카드. 이 모든 카드는 pullCard 함수로 받는다. 
 }
 
 //카드를 나눠줌 
 int pullCard(int number){
-	int i, check_number, return_number, card;
+	int return_number;
+	int card;
+	int i;
+	int number_i;
 	
-	do{												//플레이어에게 제공되는 카드를 의미함. 
-		Number[number]=rand()%N_CARD;				//CARDTRAY에 임의로 값을 할당하고 pullcard함수에서는 그 CARDTRAY의 배열이름을 임의로 할당해서 가져옴. 
-		for(i=0;i<number;i++)						//이 경우 중복을 피하고자 임시로 Number배열에 임의로 할당된 숫자를 저장하고 만약 임의로 할당된 
-		{											 
-			if(Number[number]=Number[i])
-			{
-				check_number=1;						//숫자가 같을 경우 다시 할당받도록 함.  
-			}
-			else
-			{
-				check_number=2;
-			}
-		}
-	}while(check_number==1);
-
-	card = CARDTRAY[Number[number]];				//최종적으로 숫자가 다를 경우에만 CARDTRAY에 들어갈 수 있음. 
+	srand((unsigned)time(NULL));
+	
+	for(i=0;i<N_CARD;i++)
+	{	
+		Number[i]=rand()%N_CARD;
+		
+		for(number_i=0;number_i<i;number_i++)
+		{
+			if(Number[i]==Number[number_i])
+			{	
+				i--;
+				break;
+			}	
+		} 
+	}
+	
+	return_number=Number[number];
+	
+	card = CARDTRAY[return_number];				//최종적으로 숫자가 다를 경우에만 CARDTRAY에 들어갈 수 있음. 
 	return card;
 }
 
 void printCardInitialStatus(void){					//초기의 카드를 알려주는 함수. 
 	int i;											//'나'의 카드를 알려줌. 
-	printf("본인의 카드 : ");
+	printf("본인의 카드 : \n");
 	printCard(cardhold[0][0]);
 	printCard(cardhold[0][1]);
-	printf("------------------------------------------");
-	for (i=1;i<with_player;i++)						//함께 할 플레이어 카드를 알려줌. 
+	printf("\n------------------------------------------\n");
+	for (i=1;i<=with_player;i++)						//함께 할 플레이어 카드를 알려줌. 
 	{
-		printf("i 플레이어의 카드: ");
+		printf("%d 플레이어의 카드: \n",i);
 		printCard(cardhold[i][0]);
 		printCard(cardhold[i][1]);
-		printf("---------------------------------------");
+		printf("\n---------------------------------------\n");
 	}
 	printf("딜러의 카드 : ");						//딜러의 카드를 알려줌. 
 	printf("알 수 없음");							//딜러의 카드는 한가지만 알려줄 수 있음. 
-	printCard(cardhold[N_MAX_USER][0]);
+	printCard(cardhold[N_MAX_USER+1][0]);
 }
 
 void printUserCardStatus(int user, int cardcnt){
@@ -299,7 +310,7 @@ int calcStepResult(int user,int turn){				//각 단계의 결과값을 알려줌.
 int getAction(void){							//'GO'할지 'STOP'할 지 결정해야함. 
 	
 	char input;
-	printf("go하시겠습니까? stop 하시겠습니까? (Y / N) :  ");
+	printf("go하시겠습니까? stop 하시겠습니까? (Y / N)(대문자로!) :  ");
 	scanf("%c",input);							//교수님이 주신 함수가 자꾸 오류가 나서... 그냥 scanf로 받아서 했습니다. 
 	return input;
 }
@@ -356,12 +367,7 @@ int checkWinner(int player)			//최대값을 비교하는 경우.
 
 
 int main(int argc, char *argv[]) {
-	now_money[0]=50;		//초기 모든 플레이어가 가질 수 있는 돈을 저장한 배열. 
-	now_money[1]=50;
-	now_money[2]=50;
-	now_money[3]=50;
-	now_money[4]=50;
-	now_money[5]=50;
+
 	
 	int roundIndex = 0;			//몇번 라운드를 했는지를 알려줄 값. 
 	int n_user;					//함께 진행하는 플레이어의 수. 
@@ -392,12 +398,12 @@ int main(int argc, char *argv[]) {
 		printf("\n------------------------게임을 시작하겠습니다-------------------------\n");
 		roundIndex++;				//기본으로 한 라운드를 시작하므로 
 		
-		printf("현재는 %d라운드 입니다.",roundIndex);	//라운드를 알려줌 
+		printf("현재는 %d라운드 입니다.\n",roundIndex);	//라운드를 알려줌 
 		
-		printf("현재 자산 결과는 다음과 같습니다.");	//초기값과 각 라운드 시작할때마다의 값을 알려주려고함. 
+		printf("현재 자산 결과는 다음과 같습니다.\n");	//초기값과 각 라운드 시작할때마다의 값을 알려주려고함. 
 		for(i=0;i<n_user;i++)
 		{
-			printf("플레이어i의 현재 자산은 %d 입니다",i,now_money[i]);
+			printf("플레이어%d의 현재 자산은 %d 입니다\n",i,now_money[i]);
 		}
 		
 		printf("\n---------------------------------------------------------\n");
@@ -460,28 +466,28 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		printf("딜러의 순서 입니다!"); 				//앞의 모든 플레이어와 똑같음. 
-		while(cardSum[n_user]<17)
+		while(cardSum[N_MAX_USER]<17)
 		{
 			
 			round_try_for_dealer++;
 			printUserCardStatus(n_user,round_try_for_dealer);		//여기서 딜러의 숨겨왔던 카드를 보여줌 
-			cardSum[n_user]=calcStepResult(n_user,round_try_for_dealer);
-			if(cardSum[n_user]==21)
+			cardSum[N_MAX_USER]=calcStepResult(n_user,round_try_for_dealer);
+			if(cardSum[N_MAX_USER]==21)
 				break;
-			else if(cardSum[n_user]>21)
+			else if(cardSum[N_MAX_USER]>21)
 				break;	
-			else if(cardSum[n_user]<17)//딜러도 카드를 뽑을 수 있음. 
+			else if(cardSum[N_MAX_USER]<17)//딜러도 카드를 뽑을 수 있음. 
 			{
 				printf("딜러가 한장을 더 뽑았습니다.");
-				offerCardsplus(n_user,round_try_for_dealer);
+				offerCardsplus(N_MAX_USER,round_try_for_dealer);
 			}
-			else if(cardSum[n_user]>17&&cardSum[n_user]<21)
+			else if(cardSum[N_MAX_USER]>17&&cardSum[N_MAX_USER]<21)
 			{
 				printf("딜러가 그만 뽑기를 선택했습니다.");
 			}
-			cardNumber[n_user]=round_try_for_dealer+1;
+			cardNumber[N_MAX_USER]=round_try_for_dealer+1;
 		}
-		printf("딜러의 값은 %d 입니다",cardSum[n_user]);
+		printf("딜러의 값은 %d 입니다",cardSum[N_MAX_USER]);
 		for (i=0;i<n_user;i++)
 		{
 			CheckResult(i);			//결과 값을 비교함. 플레이어가 이겼는지 안 이겼는지를 확인함. 
